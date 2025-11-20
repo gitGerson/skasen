@@ -16,6 +16,7 @@ class Aspirasi extends Model
         'keterangan',
         'image_path',
         'is_anonymous',
+        'status',
     ];
 
     protected $casts = [

@@ -19,12 +19,12 @@ return new class extends Migration {
 
             // Relasi ke tujuan
             $table->foreignId('tujuan_id')
-                ->constrained('tujuan')
+                ->constrained('tujuans')
                 ->onDelete('cascade');
 
             // Relasi ke kategori
             $table->foreignId('kategori_id')
-                ->constrained('kategori')
+                ->constrained('kategoris')
                 ->onDelete('cascade');
 
             $table->text('keterangan');
