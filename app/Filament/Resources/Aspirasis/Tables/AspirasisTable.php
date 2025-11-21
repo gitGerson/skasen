@@ -13,6 +13,7 @@ use Filament\Facades\Filament;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -56,6 +57,10 @@ class AspirasisTable
                     'Selesai' => 'Selesai',
                 ])->selectablePlaceholder(false)
                 ->sortable();
+
+            $columns[] = ToggleColumn::make('is_verify')
+                ->label('Terverifikasi')
+                ->sortable();
         } else {
             $columns[] = TextColumn::make('status')
                 ->label('Status')
@@ -65,6 +70,11 @@ class AspirasisTable
                     'info' => 'Sedang Ditindaklanjuti',
                     'success' => 'Selesai',
                 ])
+                ->sortable();
+
+            $columns[] = IconColumn::make('is_verify')
+                ->label('Terverifikasi')
+                ->boolean()
                 ->sortable();
         }
 
