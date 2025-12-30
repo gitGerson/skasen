@@ -14,6 +14,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -46,6 +47,28 @@ class AspirasisTable
                 ->badge()
                 ->sortable()
                 ->searchable(),
+            TextColumn::make('prioritas.prioritas')
+                ->label('Prioritas')
+                ->badge()
+                ->placeholder('Belum diklasifikasi')
+                ->tooltip('Klik untuk detail klasifikasi')
+                ->color(fn (?string $state): string => match ($state) {
+                    'Tinggi' => 'danger',
+                    'Sedang' => 'warning',
+                    'Rendah' => 'success',
+                    default => 'gray',
+                })
+                ->action(
+                    Action::make('priorityDetail')
+                        ->label('Detail Klasifikasi')
+                        ->modalHeading('Detail Klasifikasi')
+                        ->modalDescription(fn (Aspirasi $record): string => 'Aspirasi #' . $record->id)
+                        ->modalContent(fn (Aspirasi $record) => view('filament.aspirasi.priority-detail', [
+                            'record' => $record,
+                        ]))
+                        ->modalSubmitAction(false)
+                        ->modalCancelActionLabel('Tutup')
+                ),
         ];
 
         if (self::canManageStatus()) {
@@ -91,6 +114,7 @@ class AspirasisTable
         ];
 
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('prioritas'))
             ->columns($columns)
             ->filters([
                 SelectFilter::make('status')

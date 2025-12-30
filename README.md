@@ -1,35 +1,6 @@
-# 🚀 Glow Starter Kit
+# 🚀 gitGerson/Filament Starter Kit
 
 This is a **Filament v4 Starter Kit** for **Laravel 12**, designed to accelerate the development of Filament-powered applications.
-
-Preview:
-![](https://raw.githubusercontent.com/ercogx/laravel-filament-starter-kit/main/preview-white.png)
-Dark Mode:
-![](https://raw.githubusercontent.com/ercogx/laravel-filament-starter-kit/main/preview.png)
-
-## Compatibility
-
-| Starter Kit                                                            | Filament Version                                        |
-|------------------------------------------------------------------------|---------------------------------------------------------|
-| [1.x](https://github.com/Ercogx/laravel-filament-starter-kit/tree/1.x) | [3.x](https://github.com/filamentphp/filament/tree/3.x) |
-| **2.x**                                                                | **4.x**                                                 |
-
-
-## 📦 Installation
-
-You need the Laravel Installer if it is not yet installed.
-
-```bash
-composer global require laravel/installer
-```
-
-Now you can create a new project using the Laravel Filament Starter Kit.
-
-```bash
-laravel new test-kit --using=ercogx/laravel-filament-starter-kit
-```
-
-> If you want a Filament v3 (not recommended) ```laravel new test-kit --using=ercogx/laravel-filament-starter-kit:1.8.0```
 
 ## ⚙️ Setup
 
@@ -79,10 +50,3 @@ composer check
 ## 📜 License
 
 This project is open-source and licensed under the MIT License.
-
-## 💡 Contributing
-
-We welcome contributions! Feel free to open issues, submit PRs, or suggest improvements.
-
-
-### 🚀 Happy Coding with Laravel & Filament! 🎉

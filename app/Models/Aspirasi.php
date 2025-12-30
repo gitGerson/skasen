@@ -40,4 +40,9 @@ class Aspirasi extends Model
     {
         return $this->belongsTo(Kategori::class);
     }
+
+    public function prioritas()
+    {
+        return $this->hasOne(AspirasiPrioritas::class);
+    }
 }

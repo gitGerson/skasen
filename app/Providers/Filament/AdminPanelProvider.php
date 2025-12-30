@@ -2,27 +2,31 @@
 
 namespace App\Providers\Filament;
 
-use Andreia\FilamentNordTheme\FilamentNordThemePlugin;
-use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\AuthenticateSession;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
+use App\Filament\Widgets\SiswaOverview;
+use App\Filament\Widgets\SiswaOverview2;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
+use App\Filament\Auth\Login;
+use Filament\Pages\Dashboard;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Openplain\FilamentShadcnTheme\Color;
+use Filament\Http\Middleware\Authenticate;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
+// use Filament\Support\Colors\Color;
+use Illuminate\Session\Middleware\StartSession;
+use Devonab\FilamentEasyFooter\EasyFooterPlugin;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Filament\Http\Middleware\AuthenticateSession;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Andreia\FilamentNordTheme\FilamentNordThemePlugin;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Http\Middleware\DisableBladeIconComponents;
 use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
-use App\Filament\Auth\Login;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -35,7 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->login(Login::class)
             ->darkMode(false)
             ->colors([
-                'primary' => Color::Indigo,
+                'primary' => Color::Blue,
             ])
             ->brandName('SUARA SKASEN')
             ->topNavigation()
@@ -50,12 +54,18 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
+                SiswaOverview::class,
+                SiswaOverview2::class,
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
-                FilamentBackgroundsPlugin::make(),
+                FilamentBackgroundsPlugin::make()->showAttribution(false),
                 BreezyCore::make()
                     ->myProfile(),
+                EasyFooterPlugin::make()
+                    ->withFooterPosition('footer')
+                    ->withSentence('SMK N Kebasen. All rights reserved')
+                    ->withBorder(true),
             ])
             ->middleware([
                 EncryptCookies::class,

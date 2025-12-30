@@ -9,9 +9,9 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
 
@@ -97,7 +97,7 @@ class AspirasiForm
 
     protected static function resolveIdentityValues(?Model $record, ?Get $get = null): array
     {
-        $userId = $record?->user_id ?? $get?->get('user_id') ?? auth()->id();
+        $userId = $record?->user_id ?? $get?->integer('user_id', true) ?? auth()->id();
 
         if (! $userId) {
             return [null, null];
