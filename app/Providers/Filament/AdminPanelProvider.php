@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\AspirasiTotalOverview;
 use App\Filament\Widgets\SiswaOverview;
 use App\Filament\Widgets\SiswaOverview2;
 use Filament\Panel;
@@ -54,6 +55,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
+                AspirasiTotalOverview::class,
                 SiswaOverview::class,
                 SiswaOverview2::class,
             ])

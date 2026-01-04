@@ -8,35 +8,28 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Builder;
 
-class SiswaOverview2 extends StatsOverviewWidget
+class AspirasiTotalOverview extends StatsOverviewWidget
 {
-    private const STATUS_BELUM = 'Belum Ditindaklanjuti';
-    private const STATUS_SEDANG = 'Sedang Ditindaklanjuti';
-    private const STATUS_SELESAI = 'Selesai';
-
-    protected ?string $heading = 'Status Tindak Lanjut';
+    protected ?string $heading = null;
 
     protected function getStats(): array
     {
         $query = $this->getScopedQuery();
+        $total = (clone $query)->count();
 
-        $belum = (clone $query)->where('status', self::STATUS_BELUM)->count();
-        $sedang = (clone $query)->where('status', self::STATUS_SEDANG)->count();
-        $selesai = (clone $query)->where('status', self::STATUS_SELESAI)->count();
+        $label = $this->canViewAny()
+            ? 'Total Aspirasi Masuk'
+            : 'Total Aspirasi Kamu';
 
         return [
-            Stat::make('Belum Ditindaklanjuti', $belum . ' Laporan')
-                ->color('primary'),
-            Stat::make('Sedang Ditindaklanjuti', $sedang . ' Laporan')
+            Stat::make($label, $total . ' Laporan')
                 ->color('warning'),
-            Stat::make('Sudah Ditindaklanjuti', $selesai . ' Laporan')
-                ->color('success'),
         ];
     }
 
     protected function getColumns(): int | array | null
     {
-        return 3;
+        return 1;
     }
 
     protected function getScopedQuery(): Builder
