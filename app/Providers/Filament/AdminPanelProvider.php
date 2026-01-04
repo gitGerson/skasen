@@ -28,6 +28,7 @@ use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Swis\Filament\Backgrounds\ImageProviders\MyImages;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -61,7 +62,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
-                FilamentBackgroundsPlugin::make()->showAttribution(false),
+                FilamentBackgroundsPlugin::make()->imageProvider(MyImages::make()->directory('images/assets')),
                 BreezyCore::make()
                     ->myProfile(),
                 EasyFooterPlugin::make()
