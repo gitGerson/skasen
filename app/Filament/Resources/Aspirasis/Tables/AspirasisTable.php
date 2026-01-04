@@ -123,6 +123,8 @@ class AspirasisTable
                         'Sedang Ditindaklanjuti' => 'Sedang Ditindaklanjuti',
                         'Selesai' => 'Selesai',
                     ])->selectablePlaceholder(false),
+                SelectFilter::make('prioritas.prioritas')
+                    ->label('Prioritas'),
                 TernaryFilter::make('is_anonymous')
                     ->label('Anonim'),
             ])
@@ -145,13 +147,13 @@ class AspirasisTable
 
     protected static function canViewIdentity(Model $record): bool
     {
-        if (!$record->is_anonymous) {
+        if (! $record->is_anonymous) {
             return true;
         }
 
-        $user = auth()->user();
+        $user = Filament::auth()->user();
 
-        return $user?->hasAnyRole(['super_admin', 'bk', 'siswa']);
+        return $user?->can('viewIdentity', $record) ?? false;
     }
 
     protected static function canManageStatus(): bool

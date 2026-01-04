@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Aspirasis\Schemas;
 
+use App\Models\Aspirasi;
 use App\Models\User;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
@@ -89,7 +90,7 @@ class AspirasiForm
     protected static function syncIdentityFields(Set $set, Get $get, ?Model $record, bool $isAnonymous): void
     {
         [$name, $nis] = self::resolveIdentityValues($record, $get);
-        $showIdentity = self::shouldRevealIdentity($isAnonymous);
+        $showIdentity = self::shouldRevealIdentity($record, $isAnonymous);
 
         $set('user_name', $showIdentity ? $name : 'Anonim');
         $set('user_nis', $showIdentity ? $nis : 'Anonim');
@@ -112,7 +113,7 @@ class AspirasiForm
     {
         [$name, $nis] = self::resolveIdentityValues($record);
         $isAnonymous = $record?->is_anonymous ?? false;
-        $showIdentity = self::shouldRevealIdentity($isAnonymous);
+        $showIdentity = self::shouldRevealIdentity($record, $isAnonymous);
 
         return [
             'name' => $showIdentity ? $name : 'Anonim',
@@ -120,7 +121,7 @@ class AspirasiForm
         ];
     }
 
-    protected static function shouldRevealIdentity(bool $isAnonymous): bool
+    protected static function shouldRevealIdentity(?Model $record, bool $isAnonymous): bool
     {
         if (! $isAnonymous) {
             return true;
@@ -128,6 +129,16 @@ class AspirasiForm
 
         $user = auth()->user();
 
-        return $user?->hasAnyRole(['super_admin', 'siswa']) ?? false;
+        if (! $user) {
+            return false;
+        }
+
+        $recordForCheck = $record instanceof Aspirasi
+            ? clone $record
+            : new Aspirasi(['user_id' => auth()->id()]);
+
+        $recordForCheck->is_anonymous = $isAnonymous;
+
+        return $user->can('viewIdentity', $recordForCheck);
     }
 }
