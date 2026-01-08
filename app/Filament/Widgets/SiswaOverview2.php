@@ -49,7 +49,7 @@ class SiswaOverview2 extends StatsOverviewWidget
         }
 
         if (! $this->canViewAny()) {
-            $query->where('user_id', $user->id);
+            $query->where('user_id', $user->getAuthIdentifier());
         }
 
         return $query;
