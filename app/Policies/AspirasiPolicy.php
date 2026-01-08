@@ -22,6 +22,11 @@ class AspirasiPolicy
         return $authUser->can('view_aspirasi');
     }
 
+    public function viewAdminSummary(AuthUser $authUser): bool
+    {
+        return $authUser->can('view_any_aspirasi');
+    }
+
     public function viewIdentity(AuthUser $authUser, Aspirasi $aspirasi): bool
     {
         if (! $aspirasi->is_anonymous) {
@@ -29,11 +34,6 @@ class AspirasiPolicy
         }
 
         return $authUser->can('view_identity_aspirasi');
-    }
-
-    public function viewAdminSummary(AuthUser $authUser): bool
-    {
-        return $authUser->can('view_any_aspirasi');
     }
 
     public function create(AuthUser $authUser): bool
