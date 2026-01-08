@@ -31,7 +31,7 @@ class AspirasiPolicy
         return $authUser->can('view_identity_aspirasi');
     }
 
-    public function viewAdminWidgets(AuthUser $authUser, Aspirasi $aspirasi): bool
+    public function viewAdminWidgets(AuthUser $authUser): bool
     {
         return $authUser->can('view_admin_widgets');
     }

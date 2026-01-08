@@ -59,7 +59,7 @@ class SiswaOverview2 extends StatsOverviewWidget
     {
         $user = Filament::auth()->user();
 
-        return $user?->can('view_admin_widgets', Aspirasi::class) ?? false;
+        return $user?->can('viewAdminWidgets', Aspirasi::class) ?? false;
     }
 
     public static function canView(): bool
