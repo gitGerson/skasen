@@ -14,6 +14,10 @@ class AspirasiChart extends ChartWidget
 
     protected ?string $heading = 'Grafik Perkembangan Aspirasi';
 
+    protected static ?int $sort = 99;
+
+    protected int | string | array $columnSpan = 'full';
+
     protected function getData(): array
     {
         $user = Filament::auth()->user();
