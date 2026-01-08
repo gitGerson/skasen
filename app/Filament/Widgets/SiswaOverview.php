@@ -12,6 +12,9 @@ class SiswaOverview extends StatsOverviewWidget
 {
     protected ?string $heading = 'Verifikasi';
 
+    protected static ?int $sort = 2;
+
+
     protected function getStats(): array
     {
         $query = $this->getScopedQuery();
@@ -27,7 +30,7 @@ class SiswaOverview extends StatsOverviewWidget
         ];
     }
 
-    protected function getColumns(): int | array | null
+    protected function getColumns(): int|array|null
     {
         return 2;
     }
@@ -37,11 +40,11 @@ class SiswaOverview extends StatsOverviewWidget
         $user = Filament::auth()->user();
         $query = Aspirasi::query();
 
-        if (! $user) {
+        if (!$user) {
             return $query->whereRaw('1 = 0');
         }
 
-        if (! $this->viewAdminWidgets()) {
+        if (!$this->viewAdminWidgets()) {
             $query->where('user_id', $user->getAuthIdentifier());
         }
 
@@ -59,7 +62,7 @@ class SiswaOverview extends StatsOverviewWidget
     {
         $user = Filament::auth()->user();
 
-        if (! $user) {
+        if (!$user) {
             return false;
         }
 

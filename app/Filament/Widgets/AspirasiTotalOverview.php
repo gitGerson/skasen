@@ -12,6 +12,9 @@ class AspirasiTotalOverview extends StatsOverviewWidget
 {
     protected ?string $heading = null;
 
+    protected static ?int $sort = 1;
+
+
     protected function getStats(): array
     {
         $query = $this->getScopedQuery();
@@ -27,7 +30,7 @@ class AspirasiTotalOverview extends StatsOverviewWidget
         ];
     }
 
-    protected function getColumns(): int | array | null
+    protected function getColumns(): int|array|null
     {
         return 1;
     }
@@ -37,11 +40,11 @@ class AspirasiTotalOverview extends StatsOverviewWidget
         $user = Filament::auth()->user();
         $query = Aspirasi::query();
 
-        if (! $user) {
+        if (!$user) {
             return $query->whereRaw('1 = 0');
         }
 
-        if (! $this->canViewAdminWidgets()) {
+        if (!$this->canViewAdminWidgets()) {
             $query->where('user_id', $user->getAuthIdentifier());
         }
 
@@ -59,7 +62,7 @@ class AspirasiTotalOverview extends StatsOverviewWidget
     {
         $user = Filament::auth()->user();
 
-        if (! $user) {
+        if (!$user) {
             return false;
         }
 

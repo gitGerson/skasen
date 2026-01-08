@@ -16,6 +16,9 @@ class SiswaOverview2 extends StatsOverviewWidget
 
     protected ?string $heading = 'Status Tindak Lanjut';
 
+    protected static ?int $sort = 3;
+
+
     protected function getStats(): array
     {
         $query = $this->getScopedQuery();
@@ -34,7 +37,7 @@ class SiswaOverview2 extends StatsOverviewWidget
         ];
     }
 
-    protected function getColumns(): int | array | null
+    protected function getColumns(): int|array|null
     {
         return 3;
     }
@@ -44,11 +47,11 @@ class SiswaOverview2 extends StatsOverviewWidget
         $user = Filament::auth()->user();
         $query = Aspirasi::query();
 
-        if (! $user) {
+        if (!$user) {
             return $query->whereRaw('1 = 0');
         }
 
-        if (! $this->viewAdminWidgets()) {
+        if (!$this->viewAdminWidgets()) {
             $query->where('user_id', $user->getAuthIdentifier());
         }
 
@@ -66,7 +69,7 @@ class SiswaOverview2 extends StatsOverviewWidget
     {
         $user = Filament::auth()->user();
 
-        if (! $user) {
+        if (!$user) {
             return false;
         }
 
