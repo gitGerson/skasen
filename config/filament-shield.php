@@ -229,6 +229,7 @@ return [
 
     'custom_permissions' => [
         'view_identity_aspirasi' => 'Lihat Identitas Aspirasi',
+        'view_admin_widgets' => 'Admin Widgets'
     ],
 
     /*

@@ -48,14 +48,14 @@ class SiswaOverview2 extends StatsOverviewWidget
             return $query->whereRaw('1 = 0');
         }
 
-        if (! $this->canViewAny()) {
+        if (! $this->viewAdminWidgets()) {
             $query->where('user_id', $user->getAuthIdentifier());
         }
 
         return $query;
     }
 
-    protected function canViewAny(): bool
+    protected function viewAdminWidgets(): bool
     {
         $user = Filament::auth()->user();
 
