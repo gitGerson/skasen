@@ -17,7 +17,7 @@ class AspirasiTotalOverview extends StatsOverviewWidget
         $query = $this->getScopedQuery();
         $total = (clone $query)->count();
 
-        $label = $this->canViewAny()
+        $label = $this->canViewAdminWidgets()
             ? 'Total Aspirasi Masuk'
             : 'Total Aspirasi Kamu';
 
@@ -41,18 +41,18 @@ class AspirasiTotalOverview extends StatsOverviewWidget
             return $query->whereRaw('1 = 0');
         }
 
-        if (! $this->canViewAny()) {
-            $query->where('user_id', $user->id);
+        if (! $this->canViewAdminWidgets()) {
+            $query->where('user_id', $user->getAuthIdentifier());
         }
 
         return $query;
     }
 
-    protected function canViewAny(): bool
+    protected function canViewAdminWidgets(): bool
     {
         $user = Filament::auth()->user();
 
-        return $user?->can('viewAny', Aspirasi::class) ?? false;
+        return $user?->can('viewAdminWidgets', Aspirasi::class) ?? false;
     }
 
     public static function canView(): bool
@@ -63,7 +63,7 @@ class AspirasiTotalOverview extends StatsOverviewWidget
             return false;
         }
 
-        return $user->can('viewAny', Aspirasi::class)
+        return $user->can('viewAdminWidgets', Aspirasi::class)
             || $user->can('view', new Aspirasi());
     }
 }
