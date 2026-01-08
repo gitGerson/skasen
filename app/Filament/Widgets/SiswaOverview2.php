@@ -70,7 +70,7 @@ class SiswaOverview2 extends StatsOverviewWidget
             return false;
         }
 
-        return $user->can('viewAny', Aspirasi::class)
+        return $user->can('viewAdminWidgets', Aspirasi::class)
             || $user->can('view', new Aspirasi());
     }
 }
