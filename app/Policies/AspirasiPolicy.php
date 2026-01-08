@@ -14,13 +14,17 @@ class AspirasiPolicy
     
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('view_any_aspirasi')
-            || $authUser->can('view_aspirasi');
+        return $authUser->can('view_any_aspirasi');
     }
 
     public function view(AuthUser $authUser, Aspirasi $aspirasi): bool
     {
         return $authUser->can('view_aspirasi');
+    }
+
+    public function viewAdminSummary(AuthUser $authUser): bool
+    {
+        return $authUser->can('view_any_aspirasi');
     }
 
     public function viewIdentity(AuthUser $authUser, Aspirasi $aspirasi): bool

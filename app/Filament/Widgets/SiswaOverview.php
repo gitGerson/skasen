@@ -41,18 +41,18 @@ class SiswaOverview extends StatsOverviewWidget
             return $query->whereRaw('1 = 0');
         }
 
-        if (! $this->canViewAny()) {
+        if (! $this->canViewAdminSummary()) {
             $query->where('user_id', $user->getAuthIdentifier());
         }
 
         return $query;
     }
 
-    protected function canViewAny(): bool
+    protected function canViewAdminSummary(): bool
     {
         $user = Filament::auth()->user();
 
-        return $user?->can('viewAny', Aspirasi::class) ?? false;
+        return $user?->can('viewAdminSummary', Aspirasi::class) ?? false;
     }
 
     public static function canView(): bool
