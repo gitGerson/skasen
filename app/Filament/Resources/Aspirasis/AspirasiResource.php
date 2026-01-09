@@ -21,7 +21,7 @@ class AspirasiResource extends Resource
 {
     protected static ?string $model = Aspirasi::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ChatBubbleLeftRight;
 
     public static function form(Schema $schema): Schema
     {
