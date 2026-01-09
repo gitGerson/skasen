@@ -3,3 +3,37 @@
 
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
+
+.fi-topbar {
+    background-color: #47a7fa;
+}
+
+.fi-topbar-item-btn:hover {
+    background-color: #2f86d1;
+}
+
+.fi-topbar-item.fi-active > .fi-topbar-item-btn {
+    background-color: #2f86d1;
+}
+
+.fi-topbar-item.fi-active .fi-topbar-item-label,
+.fi-topbar-item.fi-active .fi-topbar-item-icon {
+    color: #ffff;
+}
+
+.fi-topbar-item-label {
+    color: #ffff;
+}
+
+.fi-topbar-item-icon {
+    color: #ffff;
+}
+
+.fi-topbar-group-toggle-icon {
+    color: #ffff;
+}
+
+.fi-logo {
+    color: #ffff;
+    text-shadow: 2px 2px #000000;
+}
