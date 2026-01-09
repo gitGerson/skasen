@@ -60,9 +60,9 @@ class AspirasisTable
                 })
                 ->action(
                     Action::make('priorityDetail')
-                        ->label('Detail Klasifikasi')
-                        ->modalHeading('Detail Klasifikasi')
-                        ->modalDescription(fn (Aspirasi $record): string => 'Aspirasi #' . $record->id)
+                        // ->label('Detail Klasifikasi')
+                        // ->modalHeading('Detail Klasifikasi')
+                        // ->modalDescription(fn (Aspirasi $record): string => 'Aspirasi #' . $record->id)
                         ->modalContent(fn (Aspirasi $record) => view('filament.aspirasi.priority-detail', [
                             'record' => $record,
                         ]))
