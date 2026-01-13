@@ -31,7 +31,14 @@ class User extends Authenticatable implements FilamentUser
     ];
 
     protected $fillable = [
+        'name',
+        'email',
+        'password',
         'nis',
+        'avatar_url',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'no_telepon',
     ];
 
     public function aspirasi()

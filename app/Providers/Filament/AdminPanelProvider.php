@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Widgets\AspirasiTotalOverview;
 use App\Filament\Widgets\SiswaOverview;
 use App\Filament\Widgets\SiswaOverview2;
+use App\Livewire\ProfilePageComponent;
 use Filament\Panel;
 use Filament\PanelProvider;
 use App\Filament\Auth\Login;
@@ -29,6 +30,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Swis\Filament\Backgrounds\ImageProviders\MyImages;
+
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -64,7 +66,12 @@ class AdminPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make(),
                 FilamentBackgroundsPlugin::make()->imageProvider(MyImages::make()->directory('images/assets')),
                 BreezyCore::make()
-                    ->myProfile(),
+                    ->myProfile()
+                    ->myProfileComponents([ProfilePageComponent::class])
+                    ->withoutMyProfileComponents([
+                        'update_password',
+                        'personal_info'
+                    ]),
                 EasyFooterPlugin::make()
                     ->withFooterPosition('footer')
                     ->withSentence('SMK N Kebasen. All rights reserved')

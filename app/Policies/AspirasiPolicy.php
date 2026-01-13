@@ -11,7 +11,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class AspirasiPolicy
 {
     use HandlesAuthorization;
-    
+
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('view_any_aspirasi');
@@ -24,7 +24,7 @@ class AspirasiPolicy
 
     public function viewIdentity(AuthUser $authUser, Aspirasi $aspirasi): bool
     {
-        if (! $aspirasi->is_anonymous) {
+        if (!$aspirasi->is_anonymous) {
             return true;
         }
 
@@ -49,6 +49,11 @@ class AspirasiPolicy
     public function delete(AuthUser $authUser, Aspirasi $aspirasi): bool
     {
         return $authUser->can('delete_aspirasi');
+    }
+
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('delete_any_aspirasi');
     }
 
     public function restore(AuthUser $authUser, Aspirasi $aspirasi): bool
@@ -79,6 +84,11 @@ class AspirasiPolicy
     public function reorder(AuthUser $authUser): bool
     {
         return $authUser->can('reorder_aspirasi');
+    }
+
+    public function downloadPdf(AuthUser $authUser): bool
+    {
+        return $authUser->can('download_pdf_aspirasi');
     }
 
 }

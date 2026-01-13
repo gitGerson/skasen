@@ -121,8 +121,17 @@ return [
         'merge' => true,
         'generate' => true,
         'methods' => [
-            'viewAny', 'view', 'create', 'update', 'delete', 'restore',
-            'forceDelete', 'forceDeleteAny', 'restoreAny', 'replicate', 'reorder',
+            'viewAny',
+            'view',
+            'create',
+            'update',
+            'delete',
+            'restore',
+            'forceDelete',
+            'forceDeleteAny',
+            'restoreAny',
+            'replicate',
+            'reorder',
         ],
         'single_parameter_methods' => [
             'viewAny',
@@ -229,7 +238,9 @@ return [
 
     'custom_permissions' => [
         'view_identity_aspirasi' => 'Lihat Identitas Aspirasi',
-        'view_admin_widgets' => 'Admin Widgets'
+        'view_admin_widgets' => 'Admin Widgets',
+        'delete_any_aspirasi' => 'Hapus Semua Aspirasi',
+        'download_pdf_aspirasi' => 'Unduh PDF Aspirasi',
     ],
 
     /*

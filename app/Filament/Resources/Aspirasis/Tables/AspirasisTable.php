@@ -27,13 +27,13 @@ class AspirasisTable
         $columns = [
             TextColumn::make('user.name')
                 ->label('Pengirim')
-                ->formatStateUsing(fn ($state, $record) => self::canViewIdentity($record) ? $state : 'Anonim')
+                ->formatStateUsing(fn($state, $record) => self::canViewIdentity($record) ? $state : 'Anonim')
                 ->sortable()
                 ->searchable()
                 ->toggleable(),
             TextColumn::make('user.nis')
                 ->label('NIS')
-                ->formatStateUsing(fn ($state, $record) => self::canViewIdentity($record) ? $state : 'Anonim')
+                ->formatStateUsing(fn($state, $record) => self::canViewIdentity($record) ? $state : 'Anonim')
                 ->sortable()
                 ->searchable()
                 ->toggleable(isToggledHiddenByDefault: true),
@@ -52,7 +52,7 @@ class AspirasisTable
                 ->badge()
                 ->placeholder('Belum diklasifikasi')
                 ->tooltip('Klik untuk detail klasifikasi')
-                ->color(fn (?string $state): string => match ($state) {
+                ->color(fn(?string $state): string => match ($state) {
                     'Tinggi' => 'danger',
                     'Sedang' => 'warning',
                     'Rendah' => 'success',
@@ -63,7 +63,7 @@ class AspirasisTable
                         // ->label('Detail Klasifikasi')
                         // ->modalHeading('Detail Klasifikasi')
                         // ->modalDescription(fn (Aspirasi $record): string => 'Aspirasi #' . $record->id)
-                        ->modalContent(fn (Aspirasi $record) => view('filament.aspirasi.priority-detail', [
+                        ->modalContent(fn(Aspirasi $record) => view('filament.aspirasi.priority-detail', [
                             'record' => $record,
                         ]))
                         ->modalSubmitAction(false)
@@ -114,7 +114,7 @@ class AspirasisTable
         ];
 
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('prioritas'))
+            ->modifyQueryUsing(fn(Builder $query) => $query->with('prioritas'))
             ->columns($columns)
             ->filters([
                 SelectFilter::make('status')
@@ -137,17 +137,18 @@ class AspirasisTable
                     ->label('Unduh PDF')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('gray')
-                    ->visible(fn () => self::canDownloadPdf())
-                    ->action(fn () => self::downloadPdf()),
+                    ->authorize('downloadPdf')
+                    ->action(fn() => self::downloadPdf()),
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->authorize('deleteAny'),
                 ]),
             ]);
     }
 
     protected static function canViewIdentity(Model $record): bool
     {
-        if (! $record->is_anonymous) {
+        if (!$record->is_anonymous) {
             return true;
         }
 
@@ -206,7 +207,7 @@ class AspirasisTable
         $pdf = self::buildSimplePdf($lines);
 
         return response()->streamDownload(
-            fn () => print($pdf),
+            fn() => print ($pdf),
             'aspirasi.pdf',
             ['Content-Type' => 'application/pdf']
         );
@@ -214,7 +215,7 @@ class AspirasisTable
 
     protected static function buildSimplePdf(array $lines): string
     {
-        $escape = fn (string $text): string => str_replace(
+        $escape = fn(string $text): string => str_replace(
             ['\\', '(', ')'],
             ['\\\\', '\\(', '\\)'],
             $text
@@ -227,7 +228,7 @@ class AspirasisTable
         $first = true;
 
         foreach ($contentLines as $line) {
-            if (! $first) {
+            if (!$first) {
                 $stream .= "T*\n";
             }
 
