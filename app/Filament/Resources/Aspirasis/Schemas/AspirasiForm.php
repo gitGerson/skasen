@@ -51,6 +51,21 @@ class AspirasiForm
 
                                 $component->state($nis);
                             }),
+                        Select::make('user_gender')
+                            ->label('Jenis Kelamin')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->options([
+                                'L' => 'Laki-laki',
+                                'P' => 'Perempuan',
+                            ])
+                            ->columnSpan(1)
+                            ->default(fn (?Model $record) => self::resolveIdentityValues($record)[2] ?? null)
+                            ->afterStateHydrated(function (Select $component, $state, ?Model $record) {
+                                ['gender' => $gender] = self::resolveDisplayIdentity($record);
+
+                                $component->state($gender);
+                            }),
                         Select::make('tujuan_id')
                             ->label('Tujuan Aspirasi')
                             ->relationship('tujuan', 'name')
@@ -89,11 +104,12 @@ class AspirasiForm
 
     protected static function syncIdentityFields(Set $set, Get $get, ?Model $record, bool $isAnonymous): void
     {
-        [$name, $nis] = self::resolveIdentityValues($record, $get);
+        [$name, $nis, $gender] = self::resolveIdentityValues($record, $get);
         $showIdentity = self::shouldRevealIdentity($record, $isAnonymous);
 
         $set('user_name', $showIdentity ? $name : 'Anonim');
         $set('user_nis', $showIdentity ? $nis : 'Anonim');
+        $set('user_gender', $showIdentity ? $gender : null);
     }
 
     protected static function resolveIdentityValues(?Model $record, ?Get $get = null): array
@@ -106,18 +122,19 @@ class AspirasiForm
 
         $user = User::find($userId);
 
-        return [$user?->name, $user?->nis];
+        return [$user?->name, $user?->nis, $user?->gender];
     }
 
     protected static function resolveDisplayIdentity(?Model $record): array
     {
-        [$name, $nis] = self::resolveIdentityValues($record);
+        [$name, $nis, $gender] = self::resolveIdentityValues($record);
         $isAnonymous = $record?->is_anonymous ?? false;
         $showIdentity = self::shouldRevealIdentity($record, $isAnonymous);
 
         return [
             'name' => $showIdentity ? $name : 'Anonim',
             'nis' => $showIdentity ? $nis : 'Anonim',
+            'gender' => $showIdentity ? $gender : null,
         ];
     }
 

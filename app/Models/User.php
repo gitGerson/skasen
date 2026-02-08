@@ -41,6 +41,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         'tempat_lahir',
         'tanggal_lahir',
         'no_telepon',
+        'gender',
     ];
 
     public function aspirasi()

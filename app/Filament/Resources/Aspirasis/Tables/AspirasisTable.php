@@ -189,8 +189,8 @@ class AspirasisTable
         ]);
 
         return response()->streamDownload(
-            fn() => print ($pdf->output()),
-            'aspirasi.pdf',
+            fn() => print($pdf->output()),
+            'aspirasi-' . now()->format('d-m-Y') . '.pdf',
             ['Content-Type' => 'application/pdf']
         );
     }

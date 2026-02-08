@@ -6,7 +6,7 @@
             <table class="kop-table">
                 <tr>
                     <td style="width: 52pt;">
-                        <div class="kop-logo">LOGO 1</div>
+                        <img src="{{ public_path('images/logo/Logo Dindik Jateng.png') }}" alt="Logo 1" style="width: 100%; height: auto;">
                     </td>
                     <td class="kop-center">
                         <div class="kop-line-1">PEMERINTAH PROVINSI JAWA TENGAH</div>
@@ -20,7 +20,7 @@
                         </div>
                     </td>
                     <td style="width: 52pt; text-align: right;">
-                        <div class="kop-logo">LOGO 2</div>
+                        <img src="{{ public_path('images/logo/Logo SMK Negeri Kebasen.jpg.jpeg') }}" alt="Logo 2" style="height: 60pt; width: auto;">
                     </td>
                 </tr>
             </table>
@@ -33,11 +33,10 @@
             <thead>
                 <tr>
                     <th style="width: 30pt;">No</th>
-                    <th>Nama</th>
-                    <th style="width: 70pt;">NIS</th>
-                    <th>Tujuan</th>
-                    <th>Kategori</th>
-                    <th style="width: 90pt;">Status</th>
+                    <th style="width: 90pt;">Nama</th>
+                    <th>Keterangan</th>
+                    <th style="width: 70pt;">Kategori</th>
+                    <th style="width: 60pt;">Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,19 +44,17 @@
                     @php
                         $isAnonymous = (bool) ($record->is_anonymous ?? false);
                         $name = $isAnonymous ? 'Anonim' : ($record->user?->name ?? '-');
-                        $nis = $isAnonymous ? 'Anonim' : ($record->user?->nis ?? '-');
                     @endphp
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $name }}</td>
-                        <td>{{ $nis }}</td>
-                        <td>{{ $record->tujuan?->name ?? '-' }}</td>
+                        <td>{!! $record->keterangan ?? '-' !!}</td>
                         <td>{{ $record->kategori?->name ?? '-' }}</td>
                         <td>{{ $record->status ?? '-' }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6">Tidak ada data.</td>
+                        <td colspan="5">Tidak ada data.</td>
                     </tr>
                 @endforelse
             </tbody>
