@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Services\PriorityClassifier;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use OpenAI\Exceptions\ErrorException;
-use OpenAI\Exceptions\TransporterException;
 use RuntimeException;
 use Throwable;
 
@@ -32,13 +32,11 @@ class AspirasiController extends Controller
 
         try {
             $result = $classifier->classify($validated['kategori'], $validated['text']);
-        } catch (ErrorException $exception) {
-            Log::error('OpenAI priority classification failed.', [
-                'error' => $exception->getErrorMessage(),
-                'type' => $exception->getErrorType(),
-                'code' => $exception->getErrorCode(),
-                'status' => $exception->getStatusCode(),
-                'request_id' => $exception->response->getHeaderLine('x-request-id'),
+        } catch (RequestException $exception) {
+            Log::error('AI upstream error during priority classification.', [
+                'error' => $exception->getMessage(),
+                'status' => $exception->response?->status(),
+                'request_id' => $exception->response?->header('x-request-id'),
                 'kategori_length' => strlen($validated['kategori']),
                 'text_length' => strlen($validated['text']),
             ]);
@@ -47,15 +45,15 @@ class AspirasiController extends Controller
                 ['message' => 'Terjadi kesalahan pada layanan AI. Coba lagi nanti.'],
                 502
             );
-        } catch (TransporterException $exception) {
-            Log::error('OpenAI transporter error during priority classification.', [
+        } catch (ConnectionException $exception) {
+            Log::error('AI connection error during priority classification.', [
                 'error' => $exception->getMessage(),
                 'kategori_length' => strlen($validated['kategori']),
                 'text_length' => strlen($validated['text']),
             ]);
 
             return response()->json(
-                ['message' => 'Terjadi kesalahan pada layanan AI. Coba lagi nanti.'],
+                ['message' => 'Terjadi kesalahan koneksi ke layanan AI. Coba lagi nanti.'],
                 502
             );
         } catch (RuntimeException $exception) {

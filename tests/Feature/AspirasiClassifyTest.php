@@ -2,15 +2,17 @@
 
 namespace Tests\Feature;
 
-use OpenAI\Laravel\Facades\OpenAI;
-use OpenAI\Responses\Responses\CreateResponse;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class AspirasiClassifyTest extends TestCase
 {
     public function test_classify_returns_priority_payload(): void
     {
-        config(['openai.skasen_vector_store_id' => 'vs_test']);
+        config([
+            'services.groq.api_key' => 'gsk_test_key',
+            'services.groq.model_priority' => 'meta-llama/llama-4-scout-17b-16e-instruct',
+        ]);
 
         $payload = [
             'prioritas' => 'Tinggi',
@@ -18,24 +20,16 @@ class AspirasiClassifyTest extends TestCase
             'alasan_singkat' => 'Masalah ini bersifat mendesak dan berisiko tinggi.',
         ];
 
-        OpenAI::fake([
-            CreateResponse::fake([
-                'output' => [
+        Http::fake([
+            'https://api.groq.com/openai/v1/chat/completions' => Http::response([
+                'choices' => [
                     [
-                        'type' => 'message',
-                        'id' => 'msg_test',
-                        'status' => 'completed',
-                        'role' => 'assistant',
-                        'content' => [
-                            [
-                                'type' => 'output_text',
-                                'text' => json_encode($payload, JSON_UNESCAPED_UNICODE),
-                                'annotations' => [],
-                            ],
+                        'message' => [
+                            'content' => json_encode($payload, JSON_UNESCAPED_UNICODE),
                         ],
                     ],
                 ],
-            ]),
+            ], 200),
         ]);
 
         $response = $this->postJson('/api/aspirasi/classify', [
@@ -58,30 +52,24 @@ class AspirasiClassifyTest extends TestCase
 
     public function test_classify_accepts_max_text_length(): void
     {
+        config(['services.groq.api_key' => 'gsk_test_key']);
+
         $payload = [
             'prioritas' => 'Sedang',
             'confidence' => 0.6,
             'alasan_singkat' => 'Ini masalah penting namun tidak darurat.',
         ];
 
-        OpenAI::fake([
-            CreateResponse::fake([
-                'output' => [
+        Http::fake([
+            'https://api.groq.com/openai/v1/chat/completions' => Http::response([
+                'choices' => [
                     [
-                        'type' => 'message',
-                        'id' => 'msg_long',
-                        'status' => 'completed',
-                        'role' => 'assistant',
-                        'content' => [
-                            [
-                                'type' => 'output_text',
-                                'text' => json_encode($payload, JSON_UNESCAPED_UNICODE),
-                                'annotations' => [],
-                            ],
+                        'message' => [
+                            'content' => json_encode($payload, JSON_UNESCAPED_UNICODE),
                         ],
                     ],
                 ],
-            ]),
+            ], 200),
         ]);
 
         $response = $this->postJson('/api/aspirasi/classify', [

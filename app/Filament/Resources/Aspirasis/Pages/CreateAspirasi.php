@@ -46,8 +46,8 @@ class CreateAspirasi extends CreateRecord
                         'prioritas' => $result['prioritas'],
                         'confidence' => $result['confidence'],
                         'alasan_singkat' => $result['alasan_singkat'],
-                        'model' => config('openai.model_priority', 'gpt-4o-mini'),
-                        'vector_store_id' => config('openai.skasen_vector_store_id'),
+                        'model' => config('services.groq.model_priority', 'meta-llama/llama-4-scout-17b-16e-instruct'),
+                        'vector_store_id' => null,
                         'classified_at' => now(),
                     ]
                 );
