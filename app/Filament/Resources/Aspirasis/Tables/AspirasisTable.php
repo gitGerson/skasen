@@ -10,12 +10,14 @@ use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -33,7 +35,7 @@ class AspirasisTable
                 ->searchable()
                 ->toggleable(),
             TextColumn::make('user.nis')
-                ->label('NIS')
+                ->label('NISN')
                 ->formatStateUsing(fn($state, $record) => self::canViewIdentity($record) ? $state : 'Anonim')
                 ->sortable()
                 ->searchable()
@@ -124,8 +126,32 @@ class AspirasisTable
                         'Sedang Ditindaklanjuti' => 'Sedang Ditindaklanjuti',
                         'Selesai' => 'Selesai',
                     ])->selectablePlaceholder(false),
+                TernaryFilter::make('is_verify')
+                    ->label('Status Verifikasi')
+                    ->placeholder('Semua')
+                    ->trueLabel('Terverifikasi')
+                    ->falseLabel('Belum Terverifikasi'),
                 SelectFilter::make('prioritas.prioritas')
                     ->label('Prioritas'),
+                Filter::make('created_at')
+                    ->label('Waktu Dibuat')
+                    ->form([
+                        DatePicker::make('created_from')
+                            ->label('Dari tanggal'),
+                        DatePicker::make('created_until')
+                            ->label('Sampai tanggal'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'] ?? null,
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'] ?? null,
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    }),
                 TernaryFilter::make('is_anonymous')
                     ->label('Anonim'),
             ])

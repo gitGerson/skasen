@@ -18,7 +18,7 @@ class UsersTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('nis')
-                    ->label('NIS')
+                    ->label('NISN')
                     ->searchable(),
                 TextColumn::make('roles.name')
                     ->label('Roles')

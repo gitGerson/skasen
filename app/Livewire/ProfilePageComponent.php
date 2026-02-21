@@ -64,7 +64,7 @@ class ProfilePageComponent extends MyProfileComponent
                                     ->maxLength(255),
 
                                 TextInput::make('nis')
-                                    ->label('Nomor Induk Siswa')
+                                    ->label('Nomor Induk Siswa Nasional')
                                     ->maxLength(50),
 
                                 TextInput::make('tempat_lahir')

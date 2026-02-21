@@ -20,7 +20,7 @@ class UserForm
                     ->email()
                     ->required(),
                 TextInput::make('nis')
-                    ->label('Nomor Induk Siswa / Nomor Induk Pegawai')
+                    ->label('NISN / Nomor Induk Pegawai')
                     ->required(),
                 TextInput::make('password')
                     ->password()

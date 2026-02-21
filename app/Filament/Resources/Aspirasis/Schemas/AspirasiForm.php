@@ -41,7 +41,7 @@ class AspirasiForm
                                 $component->state($name);
                             }),
                         TextInput::make('user_nis')
-                            ->label('NIS')
+                            ->label('NISN')
                             ->disabled()
                             ->dehydrated(false)
                             ->columnSpan(1)
