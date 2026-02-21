@@ -10,21 +10,29 @@ use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Livewire\Component;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 
 class AspirasisTable
 {
+    protected const STATUS_OPTIONS = [
+        'Belum Ditindaklanjuti' => 'Belum Ditindaklanjuti',
+        'Sedang Ditindaklanjuti' => 'Sedang Ditindaklanjuti',
+        'Selesai' => 'Selesai',
+    ];
+
     public static function configure(Table $table): Table
     {
         $columns = [
@@ -77,11 +85,8 @@ class AspirasisTable
         if (self::canManageStatus()) {
             $columns[] = SelectColumn::make('status')
                 ->label('Status')
-                ->options([
-                    'Belum Ditindaklanjuti' => 'Belum Ditindaklanjuti',
-                    'Sedang Ditindaklanjuti' => 'Sedang Ditindaklanjuti',
-                    'Selesai' => 'Selesai',
-                ])->selectablePlaceholder(false)
+                ->options(self::STATUS_OPTIONS)
+                ->selectablePlaceholder(false)
                 ->sortable();
 
             $columns[] = ToggleColumn::make('is_verify')
@@ -121,39 +126,26 @@ class AspirasisTable
             ->columns($columns)
             ->filters([
                 SelectFilter::make('status')
-                    ->options([
-                        'Belum Ditindaklanjuti' => 'Belum Ditindaklanjuti',
-                        'Sedang Ditindaklanjuti' => 'Sedang Ditindaklanjuti',
-                        'Selesai' => 'Selesai',
-                    ])->selectablePlaceholder(false),
+                    ->label('Status')
+                    ->options(self::STATUS_OPTIONS)
+                    ->placeholder('Semua status'),
                 TernaryFilter::make('is_verify')
                     ->label('Status Verifikasi')
                     ->placeholder('Semua')
                     ->trueLabel('Terverifikasi')
                     ->falseLabel('Belum Terverifikasi'),
                 SelectFilter::make('prioritas.prioritas')
-                    ->label('Prioritas'),
-                Filter::make('created_at')
-                    ->label('Waktu Dibuat')
-                    ->form([
-                        DatePicker::make('created_from')
-                            ->label('Dari tanggal'),
-                        DatePicker::make('created_until')
-                            ->label('Sampai tanggal'),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['created_from'] ?? null,
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
-                            )
-                            ->when(
-                                $data['created_until'] ?? null,
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
-                            );
-                    }),
+                    ->label('Prioritas')
+                    ->placeholder('Semua prioritas'),
+                DateRangeFilter::make('created_at')
+                    ->label('Rentang Waktu Dibuat')
+                    ->minDate(Carbon::create(2020, 1, 1))
+                    ->maxDate(Carbon::now()),
                 TernaryFilter::make('is_anonymous')
-                    ->label('Anonim'),
+                    ->label('Anonim')
+                    ->placeholder('Semua')
+                    ->trueLabel('Anonim')
+                    ->falseLabel('Tidak anonim'),
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -165,7 +157,7 @@ class AspirasisTable
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('gray')
                     ->authorize('downloadPdf')
-                    ->action(fn() => self::downloadPdf()),
+                    ->action(fn (?Component $livewire = null) => self::downloadPdf($livewire)),
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
                         ->authorize('deleteAny'),
@@ -198,12 +190,17 @@ class AspirasisTable
         return $user?->hasAnyRole(['super_admin', 'bk']) ?? false;
     }
 
-    protected static function downloadPdf(): StreamedResponse
+    protected static function downloadPdf(?Component $livewire = null): StreamedResponse
     {
-        $records = Aspirasi::query()
+        $query = Aspirasi::query()
             ->with(['user', 'tujuan', 'kategori'])
-            ->orderByDesc('created_at')
-            ->get();
+            ->orderByDesc('created_at');
+
+        if ($livewire) {
+            self::applyActiveTableFilters($query, $livewire);
+        }
+
+        $records = $query->get();
 
         $now = now()->format('d/m/Y H:i');
         $headerImagePath = public_path('export/KOP.jpg');
@@ -219,5 +216,55 @@ class AspirasisTable
             'aspirasi-' . now()->format('d-m-Y') . '.pdf',
             ['Content-Type' => 'application/pdf']
         );
+    }
+
+    protected static function applyActiveTableFilters(Builder $query, Component $livewire): void
+    {
+        $filters = is_array($livewire->tableFilters ?? null) ? $livewire->tableFilters : [];
+
+        $status = Arr::get($filters, 'status.value');
+        if (filled($status)) {
+            $query->where('status', $status);
+        }
+
+        $isVerify = Arr::get($filters, 'is_verify.value');
+        if (is_bool($isVerify)) {
+            $query->where('is_verify', $isVerify);
+        }
+
+        $isAnonymous = Arr::get($filters, 'is_anonymous.value');
+        if (is_bool($isAnonymous)) {
+            $query->where('is_anonymous', $isAnonymous);
+        }
+
+        $prioritas = Arr::get($filters, 'prioritas.prioritas.value');
+        if (filled($prioritas)) {
+            $query->whereHas('prioritas', fn (Builder $builder) => $builder->where('prioritas', $prioritas));
+        }
+
+        $dateRange = Arr::get($filters, 'created_at.created_at');
+        [$startDate, $endDate] = self::parseDateRange($dateRange);
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+    }
+
+    protected static function parseDateRange(mixed $dateRange): array
+    {
+        if (! is_string($dateRange) || ! str_contains($dateRange, ' - ')) {
+            return [null, null];
+        }
+
+        [$startRaw, $endRaw] = array_map('trim', explode(' - ', $dateRange, 2));
+
+        try {
+            $startDate = Carbon::createFromFormat('d/m/Y', $startRaw)->startOfDay();
+            $endDate = Carbon::createFromFormat('d/m/Y', $endRaw)->endOfDay();
+        } catch (\Throwable) {
+            return [null, null];
+        }
+
+        return [$startDate, $endDate];
     }
 }
