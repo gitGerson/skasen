@@ -44,14 +44,14 @@
                 </span>
 
                 {{-- tampilkan confidence hanya sekali --}}
-                <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-gray-700 ring-1 ring-gray-200 bg-white">
+                <!-- <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-gray-700 ring-1 ring-gray-200 bg-white">
                     {{ $confidencePctText }} • {{ $confidenceText }}
-                </span>
+                </span> -->
             </div>
         </div>
 
         {{-- Konten utama --}}
-        <div class="grid gap-4 sm:grid-cols-2">
+        <div class="grid gap-4 sm:grid-cols-1">
             {{-- Prioritas (tanpa duplikasi badge, fokus info) --}}
             <div class="rounded-lg border border-gray-200 bg-white p-4">
                 <div class="text-xs font-medium text-gray-500">Prioritas</div>
@@ -64,7 +64,7 @@
             </div>
 
             {{-- Confidence (bar + angka) --}}
-            <div class="rounded-lg border border-gray-200 bg-white p-4">
+            <!-- <div class="rounded-lg border border-gray-200 bg-white p-4">
                 <div class="flex items-center justify-between">
                     <div class="text-xs font-medium text-gray-500">Confidence</div>
                     <div class="text-xs font-semibold text-gray-700">
@@ -82,20 +82,20 @@
                 <div class="mt-1 text-[11px] text-gray-500">
                     Skor: {{ $confidenceText }}
                 </div>
-            </div>
+            </div> -->
 
             {{-- Alasan --}}
-            <div class="rounded-lg border border-gray-200 bg-white p-4 sm:col-span-2">
+            <!-- <div class="rounded-lg border border-gray-200 bg-white p-4 sm:col-span-2">
                 <div class="text-xs font-medium text-gray-500">Alasan Singkat</div>
                 <div class="mt-2 text-sm text-gray-900 whitespace-pre-line leading-relaxed">
                     {{ $prioritas->alasan_singkat ?: '-' }}
                 </div>
-            </div>
+            </div> -->
         </div>
 
         {{-- Meta info --}}
         <div class="rounded-lg border border-gray-200 bg-white p-4">
-            <div class="grid gap-4 sm:grid-cols-3">
+            <div class="grid gap-4 sm:grid-cols-2">
                 <div>
                     <div class="text-xs font-medium text-gray-500">Model</div>
                     <div class="mt-1 text-sm font-medium text-gray-900">
@@ -103,12 +103,12 @@
                     </div>
                 </div>
 
-                <div>
+                <!-- <div>
                     <div class="text-xs font-medium text-gray-500">Vector Store</div>
                     <div class="mt-1 text-sm font-medium text-gray-900">
                         {{ $prioritas->vector_store_id ?? '-' }}
                     </div>
-                </div>
+                </div> -->
 
                 <div>
                     <div class="text-xs font-medium text-gray-500">Diklasifikasi</div>
