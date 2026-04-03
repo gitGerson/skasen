@@ -2,10 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\ChangePassword;
 use App\Filament\Widgets\AspirasiTotalOverview;
 use App\Filament\Widgets\SiswaOverview;
 use App\Filament\Widgets\SiswaOverview2;
 use App\Livewire\ProfilePageComponent;
+use Filament\Actions\Action;
 use Filament\Panel;
 use Filament\PanelProvider;
 use App\Filament\Auth\Login;
@@ -51,6 +53,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
                 Dashboard::class,
+                ChangePassword::class,
             ])
             ->resources([
                 config('filament-logger.activity_resource'),
@@ -76,6 +79,13 @@ class AdminPanelProvider extends PanelProvider
                     ->withFooterPosition('footer')
                     ->withSentence('SMK N Kebasen. All rights reserved')
                     ->withBorder(true),
+            ])
+            ->userMenuItems([
+                'change-password' => fn (): Action => Action::make('change-password')
+                    ->label('Ganti Password')
+                    ->icon(Heroicon::OutlinedKey)
+                    ->url(ChangePassword::getUrl(panel: 'admin'))
+                    ->sort(0),
             ])
             ->middleware([
                 EncryptCookies::class,

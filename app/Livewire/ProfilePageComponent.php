@@ -11,8 +11,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Jeffgreco13\FilamentBreezy\Livewire\MyProfileComponent;
 
 class ProfilePageComponent extends MyProfileComponent
@@ -98,35 +96,6 @@ class ProfilePageComponent extends MyProfileComponent
                             ]),
                     ]),
 
-                // Password Section
-                Section::make('Ubah Kata Sandi')
-                    ->description('Perbarui kata sandi akun Anda.')
-                    ->schema([
-                        Grid::make(2)
-                            ->schema([
-                                TextInput::make('current_password')
-                                    ->label('Kata Sandi Saat Ini')
-                                    ->password()
-                                    ->revealable()
-                                    ->currentPassword()
-                                    ->requiredWith('new_password'),
-
-                                TextInput::make('new_password')
-                                    ->label('Kata Sandi Baru')
-                                    ->password()
-                                    ->revealable()
-                                    ->rule(Password::default())
-                                    ->autocomplete('new-password')
-                                    ->dehydrated(fn($state) => filled($state)),
-
-                                TextInput::make('new_password_confirmation')
-                                    ->label('Konfirmasi Kata Sandi Baru')
-                                    ->password()
-                                    ->revealable()
-                                    ->same('new_password')
-                                    ->requiredWith('new_password'),
-                            ]),
-                    ]),
             ])
             ->statePath('data');
     }
@@ -138,13 +107,6 @@ class ProfilePageComponent extends MyProfileComponent
         // Update personal info
         $personalInfo = collect($data)->only($this->updatable)->all();
         $this->user->update($personalInfo);
-
-        // Update password if provided
-        if (filled($data['new_password'] ?? null)) {
-            $this->user->update([
-                'password' => Hash::make($data['new_password']),
-            ]);
-        }
 
         Notification::make()
             ->success()
