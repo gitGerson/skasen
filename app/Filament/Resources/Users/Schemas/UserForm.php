@@ -21,7 +21,10 @@ class UserForm
                     ->required(),
                 TextInput::make('nis')
                     ->label('NISN / Nomor Induk Pegawai')
-                    ->unique()
+                    ->unique(ignoreRecord: true)
+                    ->validationMessages([
+                        'unique' => 'NIS Sudah terdaftar',
+                    ])
                     ->required(),
                 TextInput::make('password')
                     ->password()
