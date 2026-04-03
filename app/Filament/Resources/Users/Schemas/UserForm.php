@@ -15,28 +15,23 @@ class UserForm
             ->components([
                 TextInput::make('name')
                     ->required(),
-                TextInput::make('email')
-                    ->label('Email address')
-                    ->email()
-                    ->required(),
+                TextInput::make('password')
+                    ->password()
+                    ->confirmed()
+                    ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                    ->dehydrated(fn($state) => filled($state))
+                    ->required(fn(string $context): bool => $context === 'create'),
                 TextInput::make('nis')
                     ->label('NISN / Nomor Induk Pegawai')
                     ->unique(ignoreRecord: true)
                     ->validationMessages([
-                        'unique' => 'NIS Sudah terdaftar',
+                        'unique' => 'NIS/NIP sudah terdafta',
                     ])
                     ->required(),
-                TextInput::make('password')
-                    ->password()
-                    ->confirmed()
-                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                    ->dehydrated(fn ($state) => filled($state))
-                    ->required(fn (string $context): bool => $context === 'create'),
                 TextInput::make('password_confirmation')
-                    ->required(fn (string $context): bool => $context === 'create')
+                    ->required(fn(string $context): bool => $context === 'create')
                     ->password()
                     ->dehydrated(false),
-
                 Select::make('roles')
                     ->searchable()
                     ->preload()
@@ -44,6 +39,10 @@ class UserForm
                     ->multiple()
                     ->relationship('roles', 'name')
                     ->label('Roles'),
+                TextInput::make('email')
+                    ->label('Email address')
+                    ->email()
+                    ->required(),
             ]);
     }
 }
