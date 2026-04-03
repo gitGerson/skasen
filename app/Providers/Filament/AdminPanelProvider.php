@@ -6,6 +6,7 @@ use App\Filament\Pages\ChangePassword;
 use App\Filament\Widgets\AspirasiTotalOverview;
 use App\Filament\Widgets\SiswaOverview;
 use App\Filament\Widgets\SiswaOverview2;
+use App\Filament\Widgets\WelcomeMessageWidget;
 use App\Livewire\ProfilePageComponent;
 use Filament\Actions\Action;
 use Filament\Panel;
@@ -13,8 +14,6 @@ use Filament\PanelProvider;
 use App\Filament\Auth\Login;
 use Filament\Pages\Dashboard;
 use Filament\Support\Icons\Heroicon;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Openplain\FilamentShadcnTheme\Color;
 use Filament\Http\Middleware\Authenticate;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
@@ -61,7 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
+                WelcomeMessageWidget::class,
                 AspirasiTotalOverview::class,
                 SiswaOverview::class,
                 SiswaOverview2::class,

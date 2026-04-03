@@ -53,3 +53,7 @@
 .dark .fi-input-wrp .ts-wrapper.multi .ts-control > div .remove {
     @apply !text-primary-950/70;
 }
+
+.welcome-message-heading {
+    @apply text-2xl font-semibold leading-tight;
+}

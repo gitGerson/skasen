@@ -150,7 +150,6 @@ class AspirasiChart extends ChartWidget
 
     protected function getOptions(): array
     {
-        // hilangkan skala minus saat semua data 0
         return [
             'scales' => [
                 'y' => [

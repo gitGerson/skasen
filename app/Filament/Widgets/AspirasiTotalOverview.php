@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Aspirasi;
 use Filament\Facades\Filament;
+use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,7 +27,10 @@ class AspirasiTotalOverview extends StatsOverviewWidget
 
         return [
             Stat::make($label, $total . ' Laporan')
-                ->color('warning'),
+                ->description($total > 0 ? 'Ringkasan jumlah aspirasi yang sudah tercatat.' : 'Belum ada aspirasi yang tercatat.')
+                ->descriptionIcon($total > 0 ? Heroicon::OutlinedInboxStack : Heroicon::OutlinedInformationCircle)
+                ->icon(Heroicon::OutlinedDocumentText)
+                ->color($total > 0 ? 'warning' : 'gray'),
         ];
     }
 
