@@ -32,6 +32,10 @@ class UserForm
                     ->required(fn(string $context): bool => $context === 'create')
                     ->password()
                     ->dehydrated(false),
+                TextInput::make('email')
+                    ->label('Email address')
+                    ->email()
+                    ->required(),
                 Select::make('roles')
                     ->searchable()
                     ->preload()
@@ -39,10 +43,6 @@ class UserForm
                     ->multiple()
                     ->relationship('roles', 'name')
                     ->label('Roles'),
-                TextInput::make('email')
-                    ->label('Email address')
-                    ->email()
-                    ->required(),
             ]);
     }
 }
