@@ -45,7 +45,6 @@ class AspirasiForm
                             ->disabled()
                             ->dehydrated(false)
                             ->columnSpan(1)
-                            ->unique()
                             ->default(fn (?Model $record) => self::resolveIdentityValues($record)[1])
                             ->afterStateHydrated(function (TextInput $component, $state, ?Model $record) {
                                 ['nis' => $nis] = self::resolveDisplayIdentity($record);

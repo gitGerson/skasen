@@ -21,6 +21,7 @@ class UserForm
                     ->required(),
                 TextInput::make('nis')
                     ->label('NISN / Nomor Induk Pegawai')
+                    ->unique()
                     ->required(),
                 TextInput::make('password')
                     ->password()
