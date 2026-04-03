@@ -69,8 +69,7 @@ class ProfilePageComponent extends MyProfileComponent
                                     ->label('Nomor Induk Siswa Nasional')
                                     ->disabled()
                                     ->dehydrated(false)
-                                    ->inputMode('numeric')
-                                    ->rule('regex:/^[0-9]+$/')
+                                    ->numeric()
                                     ->validationMessages([
                                         'regex' => 'NIS harus berupa angka',
                                     ])

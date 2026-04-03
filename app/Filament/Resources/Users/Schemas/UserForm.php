@@ -24,8 +24,7 @@ class UserForm
                 TextInput::make('nis')
                     ->label('NISN / Nomor Induk Pegawai')
                     ->disabledOn('edit')
-                    ->inputMode('numeric')
-                    ->rule('regex:/^[0-9]+$/')
+                    ->numeric()
                     ->unique(ignoreRecord: true)
                     ->validationMessages([
                         'regex' => 'NIS/NIP harus berupa angka',
