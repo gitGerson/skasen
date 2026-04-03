@@ -40,12 +40,6 @@ class UserForm
                     ->label('Email address')
                     ->email()
                     ->required(),
-                Select::make('gender')
-                    ->label('Jenis Kelamin')
-                    ->options([
-                        'L' => 'Laki-laki',
-                        'P' => 'Perempuan',
-                    ]),
                 Select::make('roles')
                     ->searchable()
                     ->preload()
@@ -53,6 +47,12 @@ class UserForm
                     ->multiple()
                     ->relationship('roles', 'name')
                     ->label('Roles'),
+                Select::make('gender')
+                    ->label('Jenis Kelamin')
+                    ->options([
+                        'L' => 'Laki-laki',
+                        'P' => 'Perempuan',
+                    ]),
             ]);
     }
 }

@@ -19,7 +19,8 @@ class ProfilePageComponent extends MyProfileComponent
 {
     protected string $view = "livewire.profile-page-component";
 
-    public array $only = ['name', 'email', 'tempat_lahir', 'tanggal_lahir', 'no_telepon', 'gender', 'avatar_url'];
+    public array $only = ['name', 'email', 'nis', 'tempat_lahir', 'tanggal_lahir', 'no_telepon', 'gender', 'avatar_url'];
+    public array $updatable = ['name', 'email', 'tempat_lahir', 'tanggal_lahir', 'no_telepon', 'gender', 'avatar_url'];
     public array $data;
     public $user;
     public $userClass;
@@ -84,17 +85,17 @@ class ProfilePageComponent extends MyProfileComponent
                                     ->displayFormat('d/m/Y')
                                     ->native(false),
 
+                                TextInput::make('no_telepon')
+                                    ->label('Nomor Telepon Aktif')
+                                    ->tel()
+                                    ->maxLength(20),
+
                                 Select::make('gender')
                                     ->label('Jenis Kelamin')
                                     ->options([
                                         'L' => 'Laki-laki',
                                         'P' => 'Perempuan',
                                     ]),
-
-                                TextInput::make('no_telepon')
-                                    ->label('Nomor Telepon Aktif')
-                                    ->tel()
-                                    ->maxLength(20),
                             ]),
                     ]),
 
@@ -136,7 +137,7 @@ class ProfilePageComponent extends MyProfileComponent
         $data = $this->form->getState();
 
         // Update personal info
-        $personalInfo = collect($data)->only($this->only)->all();
+        $personalInfo = collect($data)->only($this->updatable)->all();
         $this->user->update($personalInfo);
 
         // Update password if provided
