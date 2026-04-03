@@ -37,3 +37,19 @@
     color: #ffff;
     text-shadow: 2px 2px #000000;
 }
+
+.fi-input-wrp .ts-wrapper.multi .ts-control > div {
+    @apply !bg-primary-500 !text-white;
+}
+
+.fi-input-wrp .ts-wrapper.multi .ts-control > div .remove {
+    @apply !text-white/80;
+}
+
+.dark .fi-input-wrp .ts-wrapper.multi .ts-control > div {
+    @apply !bg-primary-300 !text-primary-950;
+}
+
+.dark .fi-input-wrp .ts-wrapper.multi .ts-control > div .remove {
+    @apply !text-primary-950/70;
+}
