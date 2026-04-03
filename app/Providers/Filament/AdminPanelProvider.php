@@ -12,6 +12,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use App\Filament\Auth\Login;
 use Filament\Pages\Dashboard;
+use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Openplain\FilamentShadcnTheme\Color;
