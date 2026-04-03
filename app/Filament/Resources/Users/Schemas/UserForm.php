@@ -23,9 +23,13 @@ class UserForm
                     ->required(fn(string $context): bool => $context === 'create'),
                 TextInput::make('nis')
                     ->label('NISN / Nomor Induk Pegawai')
+                    ->disabledOn('edit')
+                    ->inputMode('numeric')
+                    ->rule('regex:/^[0-9]+$/')
                     ->unique(ignoreRecord: true)
                     ->validationMessages([
-                        'unique' => 'NIS/NIP sudah terdafta',
+                        'regex' => 'NIS/NIP harus berupa angka',
+                        'unique' => 'NIS/NIP sudah terdaftar',
                     ])
                     ->required(),
                 TextInput::make('password_confirmation')
@@ -36,6 +40,12 @@ class UserForm
                     ->label('Email address')
                     ->email()
                     ->required(),
+                Select::make('gender')
+                    ->label('Jenis Kelamin')
+                    ->options([
+                        'L' => 'Laki-laki',
+                        'P' => 'Perempuan',
+                    ]),
                 Select::make('roles')
                     ->searchable()
                     ->preload()

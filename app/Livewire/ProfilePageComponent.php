@@ -6,6 +6,7 @@ use Filament\Schemas\Schema;
 use Filament\Facades\Filament;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -18,7 +19,7 @@ class ProfilePageComponent extends MyProfileComponent
 {
     protected string $view = "livewire.profile-page-component";
 
-    public array $only = ['name', 'email', 'nis', 'tempat_lahir', 'tanggal_lahir', 'no_telepon', 'avatar_url'];
+    public array $only = ['name', 'email', 'tempat_lahir', 'tanggal_lahir', 'no_telepon', 'gender', 'avatar_url'];
     public array $data;
     public $user;
     public $userClass;
@@ -65,6 +66,13 @@ class ProfilePageComponent extends MyProfileComponent
 
                                 TextInput::make('nis')
                                     ->label('Nomor Induk Siswa Nasional')
+                                    ->disabled()
+                                    ->dehydrated(false)
+                                    ->inputMode('numeric')
+                                    ->rule('regex:/^[0-9]+$/')
+                                    ->validationMessages([
+                                        'regex' => 'NIS harus berupa angka',
+                                    ])
                                     ->maxLength(50),
 
                                 TextInput::make('tempat_lahir')
@@ -72,9 +80,16 @@ class ProfilePageComponent extends MyProfileComponent
                                     ->maxLength(255),
 
                                 DatePicker::make('tanggal_lahir')
-                                    ->label('Tgl Lahir')
+                                    ->label('Tanggal Lahir')
                                     ->displayFormat('d/m/Y')
                                     ->native(false),
+
+                                Select::make('gender')
+                                    ->label('Jenis Kelamin')
+                                    ->options([
+                                        'L' => 'Laki-laki',
+                                        'P' => 'Perempuan',
+                                    ]),
 
                                 TextInput::make('no_telepon')
                                     ->label('Nomor Telepon Aktif')
