@@ -33,6 +33,12 @@ class AspirasisTable
         'Selesai' => 'Selesai',
     ];
 
+    protected const PRIORITAS_OPTIONS = [
+        'Tinggi' => 'Tinggi',
+        'Sedang' => 'Sedang',
+        'Rendah' => 'Rendah',
+    ];
+
     public static function configure(Table $table): Table
     {
         $columns = [
@@ -135,13 +141,19 @@ class AspirasisTable
                     ->placeholder('Semua')
                     ->trueLabel('Terverifikasi')
                     ->falseLabel('Belum Terverifikasi'),
-                SelectFilter::make('prioritas.prioritas')
+                SelectFilter::make('prioritas')
                     ->label('Prioritas')
-                    ->options([
-                        'Tinggi' => 'Tinggi',
-                        'Sedang' => 'Sedang',
-                        'Rendah' => 'Rendah',
-                    ])
+                    ->options(self::PRIORITAS_OPTIONS)
+                    ->query(function (Builder $query, array $data): void {
+                        $prioritas = $data['value'] ?? null;
+
+                        if (filled($prioritas)) {
+                            $query->whereHas(
+                                'prioritas',
+                                fn (Builder $builder) => $builder->where('prioritas', $prioritas),
+                            );
+                        }
+                    })
                     ->placeholder('Semua prioritas'),
                 DateRangeFilter::make('created_at')
                     ->label('Rentang Waktu Dibuat')
@@ -243,7 +255,7 @@ class AspirasisTable
             $query->where('is_anonymous', $isAnonymous);
         }
 
-        $prioritas = Arr::get($filters, 'prioritas.prioritas.value');
+        $prioritas = Arr::get($filters, 'prioritas.value', Arr::get($filters, 'prioritas.prioritas.value'));
         if (filled($prioritas)) {
             $query->whereHas('prioritas', fn (Builder $builder) => $builder->where('prioritas', $prioritas));
         }
