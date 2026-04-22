@@ -33,6 +33,7 @@
             <thead>
                 <tr>
                     <th style="width: 30pt;">No</th>
+                    <th style="width: 60pt;">Tanggal</th>
                     <th style="width: 90pt;">Nama</th>
                     <th>Keterangan</th>
                     <th style="width: 70pt;">Kategori</th>
@@ -47,6 +48,7 @@
                     @endphp
                     <tr>
                         <td>{{ $index + 1 }}</td>
+                        <td>{{ $record->created_at?->format('d/m/Y') ?? '-' }}</td>
                         <td>{{ $name }}</td>
                         <td>{!! $record->keterangan ?? '-' !!}</td>
                         <td>{{ $record->kategori?->name ?? '-' }}</td>
@@ -54,7 +56,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">Tidak ada data.</td>
+                        <td colspan="6">Tidak ada data.</td>
                     </tr>
                 @endforelse
             </tbody>
