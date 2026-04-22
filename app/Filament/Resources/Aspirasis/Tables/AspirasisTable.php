@@ -62,6 +62,7 @@ class AspirasisTable
                 ->label('Prioritas')
                 ->badge()
                 ->placeholder('Belum diklasifikasi')
+                ->sortable()
                 ->tooltip('Klik untuk detail klasifikasi')
                 ->color(fn(?string $state): string => match ($state) {
                     'Tinggi' => 'danger',
@@ -136,6 +137,11 @@ class AspirasisTable
                     ->falseLabel('Belum Terverifikasi'),
                 SelectFilter::make('prioritas.prioritas')
                     ->label('Prioritas')
+                    ->options([
+                        'Tinggi' => 'Tinggi',
+                        'Sedang' => 'Sedang',
+                        'Rendah' => 'Rendah',
+                    ])
                     ->placeholder('Semua prioritas'),
                 DateRangeFilter::make('created_at')
                     ->label('Rentang Waktu Dibuat')
